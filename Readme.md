@@ -29,14 +29,12 @@ User → ASR → Agent (+Memory) → TTS → Audio
 Make sure you have **Python 3.10+** installed.
 
 ### 2. Create a virtual environment
-On Windows PowerShell:
-```powershell
+
 python -m venv .venv
 .venv\Scripts\Activate.ps
 
 ### 3. Install Dependencies
 pip install -r requirements.txt
-
 
 ### 4. Add environment variables
 Create a file named .env in the project root:
