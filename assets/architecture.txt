@@ -1,0 +1,12 @@
+User speech
+  -> ASR (SpeechRecognition + Microphone)
+  -> Text
+  -> Agent (LLM or rule-based) + Memory
+  -> Reply text
+  -> Murf Falcon TTS (low-latency voice synthesis)
+  -> Audio playback (Streamlit st.audio)
+
+Modularity:
+- Swap ASR: Python mic (now) -> Falcon ASR (future)
+- Swap Reply: rule-based (now) -> LLM (OpenAI) with memory (now)
+- Swap TTS: Falcon synchronous (now) -> Falcon streaming (future)
