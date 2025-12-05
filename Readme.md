@@ -52,3 +52,7 @@ streamlit run app.py
 Here’s what the app looks like:
 
 ![Streamlit UI](assets/ui.png)
+
+## 🎥 Demo Video
+
+[▶️ Watch the demo](assets/demo.mp4)
