@@ -1,14 +1,15 @@
 from typing import List, Dict
 from .memory import ConversationMemory
 from .config import OPENAI_API_KEY
-import openai
+from openai import OpenAI
 
 class SupportAgent:
     def __init__(self, memory: ConversationMemory):
         self.memory = memory
         self.use_llm = bool(OPENAI_API_KEY)
         if self.use_llm:
-            openai.api_key = OPENAI_API_KEY
+            # Create a client instance with your API key
+            self.client = OpenAI(api_key=OPENAI_API_KEY)
 
     def rule_based_reply(self, user_text: str) -> str:
         t = user_text.lower().strip()
@@ -33,13 +34,14 @@ class SupportAgent:
             )}
         ] + self.memory.as_chat_messages() + [{"role": "user", "content": user_text}]
 
-        resp = openai.ChatCompletion.create(
+        resp = self.client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
-            temperature=0.7,
             max_tokens=180
         )
-        return resp.choices[0].message["content"]
+
+        reply = resp.choices[0].message.content
+        return reply
 
     def respond(self, user_text: str) -> str:
         self.memory.add("user", user_text)

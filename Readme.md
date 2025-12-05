@@ -40,7 +40,7 @@ pip install -r requirements.txt
 Create a file named .env in the project root:
 OPENAI_API_KEY=sk-your-openai-key
 MURF_API_KEY=your-murf-api-key
-MURF_VOICE_ID=Arohi
+MURF_VOICE_ID=Tanushree
 DEFAULT_LANGUAGE=en-IN
 
 

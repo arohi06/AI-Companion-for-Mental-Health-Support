@@ -141,6 +141,17 @@ with st.sidebar:
     lang = st.selectbox("🎤 Language", options=["en-IN", "en-US", "hi-IN"], index=0, help="Choose your preferred language.")
     with st.expander("🔧 Advanced"):
         voice = st.text_input("Voice ID", value=MURF_VOICE_ID, help="Customize voice if needed.")
+    
+    # Conversation History in Sidebar
+    st.subheader("📜 Conversation History")
+    st.markdown('<div class="conversation-log">', unsafe_allow_html=True)
+    transcript = st.session_state.memory.transcript_text()
+    if transcript:
+        st.text_area("", value=transcript, height=300, disabled=True, label_visibility="collapsed")
+    else:
+        st.info("Your conversation history will appear here.")
+    st.markdown('</div>', unsafe_allow_html=True)
+    
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Default voice if not set
@@ -173,41 +184,27 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Interaction Section
+# Interaction Section (now full width, no columns)
 st.markdown('<div class="interaction-section">', unsafe_allow_html=True)
-col1, col2 = st.columns([2, 1])
-
-with col1:
-    st.subheader("💬 Start Your Conversation")
-    if st.button("🎤 Record & Respond", key="record_button"):
-        with st.spinner("🎧 Listening... Speak now!"):
-            text = transcribe_from_microphone(language_code=lang or DEFAULT_LANGUAGE, timeout_sec=6)
-        if not text:
-            st.error("❌ No speech detected. Please try again or check your microphone.")
-        else:
-            st.success("✅ Heard you loud and clear!")
-            st.markdown(f"**You:** {text}")
-            with st.spinner("🤔 Thinking..."):
-                reply = st.session_state.agent.respond(text)
-            st.markdown(f"**Companion:** {reply}")
-            
-            with st.spinner("🔊 Generating voice..."):
-                audio_bytes = murf_tts_synthesize(reply, voice_id=voice, audio_format="mp3")
-            if audio_bytes:
-                st.audio(audio_bytes, format="audio/mp3")
-            else:
-                st.warning("⚠️ Voice synthesis failed. Please check settings.")
-
-with col2:
-    st.subheader("📜 Conversation History")
-    st.markdown('<div class="conversation-log">', unsafe_allow_html=True)
-    transcript = st.session_state.memory.transcript_text()
-    if transcript:
-        st.text_area("", value=transcript, height=300, disabled=True, label_visibility="collapsed")
+st.subheader("💬 Start Your Conversation")
+if st.button("🎤 Record & Respond", key="record_button"):
+    with st.spinner("🎧 Listening... Speak now!"):
+        text = transcribe_from_microphone(language_code=lang or DEFAULT_LANGUAGE, timeout_sec=6)
+    if not text:
+        st.error("❌ No speech detected. Please try again or check your microphone.")
     else:
-        st.info("Your conversation history will appear here.")
-    st.markdown('</div>', unsafe_allow_html=True)
-
+        st.success("✅ Heard you loud and clear!")
+        st.markdown(f"**You:** {text}")
+        with st.spinner("🤔 Thinking..."):
+            reply = st.session_state.agent.respond(text)
+        st.markdown(f"**Companion:** {reply}")
+        
+        with st.spinner("🔊 Generating voice..."):
+            audio_bytes = murf_tts_synthesize(reply, voice_id=voice, audio_format="mp3")
+        if audio_bytes:
+            st.audio(audio_bytes, format="audio/mp3")
+        else:
+            st.warning("⚠️ Voice synthesis failed. Please check settings.")
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Simplified Footer (removed tech mentions)

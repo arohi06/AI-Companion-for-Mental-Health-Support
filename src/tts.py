@@ -15,7 +15,7 @@ def murf_tts_synthesize(text: str, voice_id: str = MURF_VOICE_ID, audio_format: 
         "voice_id": voice_id,
         "style":"Conversational",
         "model:":"Falcon",
-        "audio_format": audio_format,
+        "audio_format": "mp3",
         "params": {
             "speed": 1.0,
             "pitch": 0.0,
